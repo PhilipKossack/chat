@@ -1,0 +1,19 @@
+version: '3'
+services:
+  web:
+    build: ./web
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"] #["python3", "chatTest.py"]
+    volumes:
+      - ./web:/app #Development, consider removing this for production
+      - ./web/models:/models
+      - ./config:/config
+    ports:
+      - 8000:80
+
+  translate:
+    build: ./translate
+    volumes:
+      - ./translate/models:/usr/src/app/models
+    ports:
+      - 8888:80
+

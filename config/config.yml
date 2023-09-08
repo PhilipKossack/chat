@@ -1,0 +1,7 @@
+MODEL_TYPE: 'llama'
+#MODEL_BIN_PATH: '/models/llama-2-7b-chat.ggmlv3.q8_0.bin'
+#MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q8_0.bin'
+MODEL_BIN_PATH: 'models/llama-2-7b-chat.ggmlv3.q5_0.bin'
+MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q5_0.bin'
+#MAX_NEW_TOKENS: 512
+#TEMPERATURE: 0.01
