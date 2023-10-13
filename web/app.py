@@ -1,4 +1,4 @@
-from langchain import PromptTemplate, LLMChain
+#from langchain import PromptTemplate, LLMChain
 from src.llm import build_llm
 import requests
 import json
@@ -91,27 +91,39 @@ class MainProcessor (threading.Thread):
             job = self.taskQueue.get(block=True)
             jobStat.updateStatus(job['token'],job['uuid'],"processing")
             item = jobStat.getJobStatus(job['token'],job['uuid'])
+            tPrompt=False
+            tQuestion=False
+            tAnswer=False
             if item['translate']:
                 tPrompt = self.translate('de','en',item['prompt'])
                 tQuestion = self.translate('de','en',item['question'])
             
+            instruction = item['prompt']
+            prompt = f"Du bist ein hilfreicher Assistent. USER: {instruction} ASSISTANT:"
+            '''
             prompt_template="<s>[INST] <<SYS>>\n{system_message}\n<</SYS>>\n\n{user_message}[/INST]"
+            
             llm_chain = LLMChain(
                 llm=llm,
                 prompt=PromptTemplate.from_template(prompt_template)
-            
-            if tPrompt and tQuestion:
-                answer = llm_chain(tPrompt,tQuestion)
-            else:
-                answer = llm_chain(item['prompt'],item['question'])
-            
             )
+            '''
+            if tPrompt and tQuestion:
+                answer = None #llm_chain(tPrompt,tQuestion)
+            else:
+                #answer = llm_chain({'system_message':item['prompt'],'user_message':item['question']})
+                answer = llm(prompt, temperature = 0.7, max_tokens = 1024, top_k=20, top_p=0.9,repeat_penalty=1.15)
+                res = answer['choices'][0]['text'].strip()
+                jobStat.addAnswer(job['token'],job['uuid'],res)
+            
+            '''
             if item['translate']:
                 tAnswer = self.translate('en','de',answer['text'])
             if tAnswer:
                 jobStat.addAnswer(job['token'],job['uuid'],tAnswer)
             else:
                 jobStat.addAnswer(job['token'],job['uuid'],answer['text'])
+            '''
             jobStat.updateStatus(job['token'],job['uuid'],"finished")
 
 

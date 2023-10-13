@@ -1,7 +1,13 @@
 MODEL_TYPE: 'llama'
 #MODEL_BIN_PATH: '/models/llama-2-7b-chat.ggmlv3.q8_0.bin'
 #MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q8_0.bin'
-MODEL_BIN_PATH: 'models/llama-2-7b-chat.ggmlv3.q5_0.bin'
-MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q5_0.bin'
+#MODEL_BIN_PATH: 'models/llama-2-7b-chat.ggmlv3.q5_0.bin'
+#MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q5_0.bin'
 #MAX_NEW_TOKENS: 512
 #TEMPERATURE: 0.01
+
+#MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/llama-2-13B-German-Assistant-v2-GGML/resolve/main/llama-2-13b-german-assistant-v2.ggmlv3.q5_1.bin'
+#MODEL_BIN_PATH: '/models/llama-2-13b-german-assistant-v2.ggmlv3.q5_1.bin'
+
+MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/em_german_leo_mistral-GGUF/resolve/main/em_german_leo_mistral.Q5_K_S.gguf'
+MODEL_BIN_PATH: '/models/em_german_leo_mistral.Q5_K_S.gguf'
