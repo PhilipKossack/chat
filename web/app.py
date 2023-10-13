@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Any
 import pickle
+import os
 from uuid import uuid4
 
 import threading
@@ -167,7 +168,7 @@ def token_details(token):
         return tokens[token]
     return {'quota':0,'description':'Not existent'}
 
-supertoken = ""
+supertoken = os.getenv('SUPERTOKEN')
 
 
 
