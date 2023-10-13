@@ -4,5 +4,5 @@ Usage:
 
 docker-compose up
 
-see compose.yml and for config options
+see docker-compose.yml and for config/config.yml for options
 
