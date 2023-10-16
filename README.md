@@ -1,10 +1,18 @@
-Container with rest api to llama based german llm
+# What it does? 
+* With this repo you get a container which offers a rest api to a local hosted llama based llm. No GPU required.
+* Models are downloaded on first time of usage and stored in an external mount.
 
-Usage:
+# How to configure it?
 
-docker-compose up
+* LLM specific configuration is done via config/config.yml. Default config loads a german fine tuned llm. 
+* Container specific configuration is done via docker-compose.yml.
 
-see docker-compose.yml and for config/config.yml for options
+# How to use it?
 
-Service provides basic security suitable for usage behind perimeter. It's not recommende to expose the service to the internet.
+* docker-compose up
+* By default, service is available under localhost:8000.
+* To learn about the api and try things out, connect to localhost:8000/docs
+
+# How to use it secure?
+* Service provides basic security suitable for usage inside perimeter. It's not recommende to directly expose the service to the internet.
 
