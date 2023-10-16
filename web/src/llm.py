@@ -33,12 +33,6 @@ def build_llm():
         print("Specified Model not found. Downloading Model...")
         download_file(url,filename)
         print("Download complete.")
-    # Local CTransformers model
-    #llm = CTransformers(model=cfg.MODEL_BIN_PATH,
-     #                   model_type=cfg.MODEL_TYPE,
-                        #config={'max_new_tokens': cfg.MAX_NEW_TOKENS,
-                                #'temperature': cfg.TEMPERATURE}
-     #                   )
-    llm = Llama(model_path=cfg.MODEL_BIN_PATH,n_ctx=1024, n_batch=128,verbose=True) #verbose = False leads to error
+    llm = Llama(model_path=cfg.MODEL_BIN_PATH,n_ctx=cfg.NUMBER_OF_TOKENS, n_batch=128,verbose=cfg.VERBOSE) #verbose = False leads to error
     return llm
 

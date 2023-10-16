@@ -1,3 +1,5 @@
 MODEL_TYPE: 'llama'
 MODEL_DOWNLOAD_URL: 'https://huggingface.co/TheBloke/em_german_leo_mistral-GGUF/resolve/main/em_german_leo_mistral.Q5_K_S.gguf'
 MODEL_BIN_PATH: '/models/em_german_leo_mistral.Q5_K_S.gguf'
+NUMBER_OF_TOKENS: 4096
+VERBOSE: True
