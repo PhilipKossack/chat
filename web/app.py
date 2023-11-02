@@ -1,4 +1,3 @@
-#from langchain import PromptTemplate, LLMChain
 from src.llm import build_llm
 import requests
 import json
@@ -21,11 +20,11 @@ class jobStatus():
     def __init__(self):
         self.jobsByToken = {}
 
-    def addJob(self,token,uuid,prompt,question,translate):
+    def addJob(self,token,uuid,prompt): #question, translate
         if token in self.jobsByToken:
-            self.jobsByToken[token][uuid] = {'status':'queued','prompt':prompt,'question':question,'translate':translate}
+            self.jobsByToken[token][uuid] = {'status':'queued','prompt':prompt} #'question':question 'translate':translate
         else:
-            self.jobsByToken[token] = {uuid:{'status':'queued','prompt':prompt,'question':question,'translate':translate}}
+            self.jobsByToken[token] = {uuid:{'status':'queued','prompt':prompt}} #'question':question, 'translate':translate
         
     def removeJob(self,token,uuid):
         if token in self.jobsByToken:
@@ -54,12 +53,12 @@ class jobStatus():
                 status = self.jobsByToken[token][uuid]
                 status['uuid'] = uuid
                 return self.jobsByToken[token][uuid]
-        return {'uuid':'unknown','status':'unknown','prompt':'unknown','question':'unknown','answer':'unknown','translate':'unknown'}
+        return {'uuid':'unknown','status':'unknown','prompt':'unknown','answer':'unknown'} #'question':'unknown' ,'translate':'unknown'
     
     def getAllJobsForToken(self,token):
         if token in self.jobsByToken:
             return self.jobsByToken[token]
-        return {'unknown':{'status':'unknown','prompt':'unknown','question':'unknown','answer':'unknown','translate':'unknown'}}
+        return {'unknown':{'status':'unknown','prompt':'unknown','answer':'unknown'}} #'question':'unknown' ,'translate':'unknown'
 
     def getAllStatus(self):
         return self.jobsByToken
@@ -72,6 +71,7 @@ class MainProcessor (threading.Thread):
         self.taskLock = taskLock
         self.taskQueue = taskQueue
         
+    '''
     def translate(self,inLang,outLang,text):
         req = {'from':inLang,'to':outLang,'source':text.strip()}
         print(text)
@@ -85,46 +85,33 @@ class MainProcessor (threading.Thread):
                 return False
         except:
             return False
-
+    '''
 
     def run(self):
         while True:
             job = self.taskQueue.get(block=True)
             jobStat.updateStatus(job['token'],job['uuid'],"processing")
             item = jobStat.getJobStatus(job['token'],job['uuid'])
-            tPrompt=False
-            tQuestion=False
-            tAnswer=False
+            #tPrompt=False
+            #tQuestion=False
+            #tAnswer=False
+            '''
             if item['translate']:
                 tPrompt = self.translate('de','en',item['prompt'])
-                tQuestion = self.translate('de','en',item['question'])
-            
+                #tQuestion = self.translate('de','en',item['question'])
+            '''
             instruction = item['prompt']
             prompt = f"Du bist ein hilfreicher Assistent. USER: {instruction} ASSISTANT:"
+
             '''
-            prompt_template="<s>[INST] <<SYS>>\n{system_message}\n<</SYS>>\n\n{user_message}[/INST]"
+            if tPrompt: #and tQuestion:
+                answer = None 
+            else: '''
+
+            answer = llm(prompt, temperature = 0.7, max_tokens = 1024, top_k=20, top_p=0.9,repeat_penalty=1.15)
+            res = answer['choices'][0]['text'].strip()
+            jobStat.addAnswer(job['token'],job['uuid'],res)
             
-            llm_chain = LLMChain(
-                llm=llm,
-                prompt=PromptTemplate.from_template(prompt_template)
-            )
-            '''
-            if tPrompt and tQuestion:
-                answer = None #llm_chain(tPrompt,tQuestion)
-            else:
-                #answer = llm_chain({'system_message':item['prompt'],'user_message':item['question']})
-                answer = llm(prompt, temperature = 0.7, max_tokens = 1024, top_k=20, top_p=0.9,repeat_penalty=1.15)
-                res = answer['choices'][0]['text'].strip()
-                jobStat.addAnswer(job['token'],job['uuid'],res)
-            
-            '''
-            if item['translate']:
-                tAnswer = self.translate('en','de',answer['text'])
-            if tAnswer:
-                jobStat.addAnswer(job['token'],job['uuid'],tAnswer)
-            else:
-                jobStat.addAnswer(job['token'],job['uuid'],answer['text'])
-            '''
             jobStat.updateStatus(job['token'],job['uuid'],"finished")
 
 
@@ -189,9 +176,9 @@ app = FastAPI()
 
 class Item(BaseModel):
     prompt: str
-    question: str
+    #question: str
     token: str
-    translate: bool | None = False
+    #translate: bool | None = False
 
 class TokenCreation(BaseModel):
     supertoken: str
@@ -235,7 +222,7 @@ async def create_token(token: TokenRevoke) -> Any:
 async def generate_text(item: Item) -> Any:
     if(check_token(item.token)):
         uuid = uuid4().hex
-        jobStat.addJob(item.token,uuid,item.prompt,item.question,item.translate)
+        jobStat.addJob(item.token,uuid,item.prompt) #item.question,item.translate
         job = {'token':item.token,'uuid':uuid}
         try:
             taskQueue.put(job)

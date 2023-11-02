@@ -1,4 +1,3 @@
-#from langchain.llms import CTransformers
 from llama_cpp import Llama
 from dotenv import find_dotenv, load_dotenv
 import box
