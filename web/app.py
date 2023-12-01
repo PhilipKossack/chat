@@ -108,9 +108,15 @@ class MainProcessor (threading.Thread):
                 answer = None 
             else: '''
 
-            answer = llm(prompt, temperature = 0.7, max_tokens = 1024, top_k=20, top_p=0.9,repeat_penalty=1.15)
-            res = answer['choices'][0]['text'].strip()
-            jobStat.addAnswer(job['token'],job['uuid'],res)
+            answer = llm(prompt, stream=True, temperature = 0.7, max_tokens = 1024, top_k=20, top_p=0.9,repeat_penalty=1.15)
+            response = ""
+            for answ in answer:
+                res = answ['choices'][0]['text'] 
+                #print(res)
+                response += res
+                jobStat.addAnswer(job['token'],job['uuid'],response)
+            #res = answer['choices'][0]['text'].strip()
+            #jobStat.addAnswer(job['token'],job['uuid'],res)
             
             jobStat.updateStatus(job['token'],job['uuid'],"finished")
 
